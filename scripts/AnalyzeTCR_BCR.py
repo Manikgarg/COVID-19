@@ -995,19 +995,18 @@ else:
         df.drop_duplicates(inplace=True)
         df.to_csv(fileName+'_'+currentConditionColumn+'.csv')
 
-        #Write CDR3 amino acid sequence to a file
-        if os.path.exists(fileName+'_aa.txt'):
-            os.remove(fileName+'_aa.txt')
-
         keys=['v_gene', 'j_gene', 'd_gene', 'clonotype_meta']
         for current_len in df.cdr3_len.unique():
+            #Write CDR3 amino acid sequence to a file
+            if os.path.exists(fileName+'_'+str(current_len)+'_aa.txt'):
+                os.remove(fileName+'_'+str(current_len)+'_aa.txt')
             f=open(fileName+'_'+str(current_len)+'_aa.txt', 'a')
             for index, row in df.loc[df.cdr3_len==current_len, :].iterrows():
                 f.write('>'+'_'.join([str(elem) for elem in list(itertools.chain(*[list(row[k] for k in keys), [study], [index]]))])+"\n"+row['cdr3']+"\n")
             f.close()
             #Writte CDR3 nucleotide sequence to a file
-            if os.path.exists(fileName+'_nt.txt'):
-                os.remove(fileName+'_nt.txt')
+            if os.path.exists(fileName+'_'+str(current_len)+'_nt.txt'):
+                os.remove(fileName+'_'+str(current_len)+'_nt.txt')
             f=open(fileName+'_'+str(current_len)+'_nt.txt', 'a')
             for index, row in df.loc[df.cdr3_len==current_len, :].iterrows():
                 iteration=0
